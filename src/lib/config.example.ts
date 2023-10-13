@@ -1,5 +1,5 @@
 const config = {
-	locactions: [
+	locations: [
 		{
 			title: 'Berne',
 			timezone: 'Europe/Zurich',
@@ -11,6 +11,8 @@ const config = {
 		// add more locations here
 	]
 };
+
+export type URLConfig = typeof config;
 
 const encodedConfig = encodeURIComponent(JSON.stringify(config));
 console.log(encodedConfig);
