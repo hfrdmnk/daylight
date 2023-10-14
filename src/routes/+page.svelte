@@ -4,6 +4,10 @@
 	export let data;
 	let locations = data.locations;
 	let currentDateTime = new Date();
+	const sleepingOptions = {
+		start: 22,
+		end: 7
+	};
 
 	type Location = (typeof locations)[0];
 
@@ -32,26 +36,47 @@
 		}
 	}
 
+	function isSleeping(fn: () => string) {
+		const time = fn();
+		const [hours] = time.split(':');
+		const hour = parseInt(hours);
+
+		return hour >= sleepingOptions.start || hour < sleepingOptions.end;
+	}
+
 	onMount(() => {
 		setInterval(updateDateTime, 1000);
 	});
 </script>
 
 <div class="min-h-screen flex flex-col">
-	<div class="py-8 flex-1 container flex flex-col items-center">
-		<h1 class="text-4xl font-bold text-center">Daylight</h1>
-		<main class="flex-1 flex items-center flex-wrap gap-8">
+	<div class="flex-1 container flex flex-col">
+		<header class="py-8">
+			<h1 class="text-4xl font-bold text-center">Daylight</h1>
+		</header>
+		<main class="flex-1 flex items-center justify-around flex-wrap gap-2 py-8">
 			{#each locations as location}
-				<div
-					class="p-16 pb-8 flex flex-col items-center border border-gray-200 rounded-md shadow-md bg-white/50 backdrop-blur-lg"
-				>
-					<h3 class="text-4xl tabular-nums mb-2">
-						{getTimeInfo(currentDateTime, location.timezone, 'time')}
-					</h3>
-					<h3 class="font-normal tabular-nums text-2xl">
-						{getTimeInfo(currentDateTime, location.timezone, 'date')}
-					</h3>
-					<h2 class="font-normal text-gray-500 text-xl mt-16">{location.title}</h2>
+				{@const sleeping = isSleeping(() =>
+					getTimeInfo(currentDateTime, location.timezone, 'time')
+				)}
+				<div class:dark={sleeping}>
+					<div
+						class="px-16 pt-20 pb-8 flex flex-col items-center border border-gray-200 rounded-3xl shadow-lg bg-gray-50/50 backdrop-blur-lg relative dark:bg-gray-950/60 dark:border-gray-950"
+					>
+						<div
+							class="absolute top-2 right-2 p-2 bg-gray-400/20 dark:bg-gray-950/20 rounded-full h-12 w-12 flex items-center justify-center text-xl"
+						>
+							{sleeping ? '🌙' : '☀️'}
+						</div>
+						<h3 class="text-5xl tabular-nums mb-2">
+							{getTimeInfo(currentDateTime, location.timezone, 'time')}
+						</h3>
+						<h3 class="font-medium tabular-nums text-2xl">
+							{getTimeInfo(currentDateTime, location.timezone, 'date')}
+						</h3>
+
+						<h2 class="font-normal text-gray-500 text-xl mt-12">{location.title}</h2>
+					</div>
 				</div>
 			{/each}
 		</main>
