@@ -92,6 +92,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Daylight</title>
+</svelte:head>
+
 <div class="min-h-screen flex flex-col relative">
 	<div class="fixed inset-0 overflow-hidden">
 		<canvas
