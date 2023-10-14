@@ -56,7 +56,7 @@
 				const markers = location.markers.map((marker) => {
 					const tempMarker = {
 						location: [marker[0], marker[1]],
-						size: 0.1
+						size: 0.08
 					} as Marker;
 
 					return tempMarker;
